@@ -16,7 +16,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('/api', app, document);
   app.useStaticAssets(join(__dirname, '/static'), {
     prefix: '/api',
   });
