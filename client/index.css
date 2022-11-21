@@ -1,0 +1,56 @@
+@import "default.css";
+
+.container {
+    min-height: 100vh;
+    background-image: url("olympe.jpg") ;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.hero {
+    background-color: rgba(255,255,255,0.5);
+    width: 33vw;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 4rem;
+    box-shadow: 5px 5px 5px black;
+    align-items: center;
+    justify-content: center;
+    
+}
+img {
+    width: 25px;
+    margin-right: 0.5rem;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+button {
+    width: 250px;
+    height: 50px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    margin-top: 2rem;
+    padding: 0.8rem;
+    background-color: rgb(206, 127, 8);
+    color: white;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+
+}
+.docs {
+    background-color: teal;
+}
+
+button:hover {
+    background-color: black;
+}

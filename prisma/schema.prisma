@@ -10,17 +10,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// *** Auth
 model User {
-  id     Int           @id @default(autoincrement())
+  id Int @id @default(autoincrement())
+
+  profil Profil?
+
   name   String
   pseudo String
-  email  String        @unique
+  email  String  @unique
   hash   String?
   image  String?
+
   credit Transaction[]
   debts  Debt[]
 }
 
+// *** Transactions
 model Transaction {
   id        Int      @id @default(autoincrement())
   name      String
@@ -38,4 +44,113 @@ model Debt {
   transactionId Int
 
   @@id([userId, transactionId])
+}
+
+// *** Profil
+
+model Profil {
+  id Int @id @default(autoincrement())
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @unique
+
+  name      String  @default("Nom")
+  color     String  @default("#008080")
+  avatar    String  @default("/avatar.jpg")
+  firstname String  @default("Prénom")
+  address   String  @default("Chez moi")
+  intro     String  @default("Bienvenue sur mon CV")
+  website   String?
+  tel       String?
+  mail      String?
+  linkedin  String?
+  github    String?
+
+  lettres     Lettre[]
+  refs        Ref[]
+  diplomes    Diplome[]
+  experiences Experience[]
+  projects    Project[]
+  skills      Skill[]
+  hobbies     Hobby[]
+}
+
+model Lettre {
+  id Int @id @default(autoincrement())
+
+  profil   Profil? @relation(fields: [profilId], references: [id], onDelete: Cascade)
+  profilId Int?
+
+  title   String
+  content String
+  objet   String?
+}
+
+model Ref {
+  id Int @id @default(autoincrement())
+
+  profil   Profil? @relation(fields: [profilId], references: [id], onDelete: Cascade)
+  profilId Int?
+
+  file String
+}
+
+model Diplome {
+  id Int @id @default(autoincrement())
+
+  profil   Profil? @relation(fields: [profilId], references: [id], onDelete: Cascade)
+  profilId Int?
+
+  title       String
+  diplomaDate DateTime?
+  school      String
+  place       String?
+  description String?
+}
+
+model Experience {
+  id Int @id @default(autoincrement())
+
+  profil   Profil? @relation(fields: [profilId], references: [id], onDelete: Cascade)
+  profilId Int?
+
+  entreprise  String
+  poste       String
+  place       String?
+  description String?
+  startDate   DateTime?
+  endDate     DateTime?
+}
+
+model Project {
+  id Int @id @default(autoincrement())
+
+  profil   Profil? @relation(fields: [profilId], references: [id], onDelete: Cascade)
+  profilId Int?
+
+  image       String
+  title       String
+  description String
+  github      String?
+  demo        String?
+  tags        String[] @default([""])
+}
+
+model Skill {
+  id Int @id @default(autoincrement())
+
+  profil   Profil? @relation(fields: [profilId], references: [id], onDelete: Cascade)
+  profilId Int?
+
+  skill String
+  tech  Boolean @default(false)
+}
+
+model Hobby {
+  id Int @id @default(autoincrement())
+
+  profil   Profil? @relation(fields: [profilId], references: [id], onDelete: Cascade)
+  profilId Int?
+
+  name String
 }
