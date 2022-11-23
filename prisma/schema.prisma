@@ -12,15 +12,18 @@ datasource db {
 
 // *** Auth
 model User {
-  id Int @id @default(autoincrement())
+  id        Int    @id @default(autoincrement())
+  discordId String @unique
 
   profil Profil?
 
-  name   String
-  pseudo String
-  email  String  @unique
-  hash   String?
-  image  String?
+  pseudo       String
+  email        String  @unique
+  hash         String?
+  accessToken  String?
+  refreshToken String?
+  name         String?
+  image        String?
 
   credit Transaction[]
   debts  Debt[]
@@ -51,7 +54,7 @@ model Debt {
 model Profil {
   id Int @id @default(autoincrement())
 
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User @relation(fields: [userId], references: [id])
   userId Int  @unique
 
   name      String  @default("Nom")

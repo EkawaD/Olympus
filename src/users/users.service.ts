@@ -8,17 +8,21 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async create(createUserDto: CreateUserDto) {
+    const img =
+      createUserDto.avatar === null
+        ? 'https://cdn.discordapp.com/embed/avatars/0.png'
+        : 'https://cdn.discordapp.com/avatars/' +
+          createUserDto.id +
+          '/' +
+          createUserDto.avatar;
     const user = await this.prisma.user.create({
-      data: createUserDto,
-      include: { profil: true },
-    });
-    await this.prisma.profil.create({
       data: {
-        user: {
-          connect: {
-            id: user.id,
-          },
-        },
+        pseudo: createUserDto.username,
+        email: createUserDto.email,
+        discordId: createUserDto.id,
+        image: img,
+        accessToken: createUserDto.accessToken,
+        refreshToken: createUserDto.refreshToken,
       },
     });
     return user;
@@ -43,6 +47,22 @@ export class UsersService {
             hobbies: true,
           },
         },
+      },
+    });
+  }
+
+  findByMail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
+  appendToken(discordUser: CreateUserDto) {
+    return this.prisma.user.update({
+      where: { discordId: discordUser.id },
+      data: {
+        accessToken: discordUser.accessToken,
+        refreshToken: discordUser.refreshToken,
       },
     });
   }

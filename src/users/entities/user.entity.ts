@@ -6,6 +6,12 @@ export class UserEntity implements User {
   id: number;
 
   @ApiProperty()
+  discordId: string;
+
+  @ApiProperty()
+  hash: string;
+
+  @ApiProperty()
   name: string;
 
   @ApiProperty()
@@ -14,8 +20,11 @@ export class UserEntity implements User {
   @ApiProperty()
   email: string;
 
-  @ApiProperty({ required: false, nullable: true })
-  hash: string | null;
+  @ApiProperty()
+  accessToken: string;
+
+  @ApiProperty()
+  refreshToken: string;
 
   @ApiProperty({ required: false, nullable: true })
   image: string | null;

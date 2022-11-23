@@ -6,12 +6,14 @@ import {
   Param,
   Delete,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ProfilsService } from './profils.service';
 import { UpdateProfilDto } from './dto/update-profil.dto';
 import { ProfilEntity } from './entities/profil.entity';
 import { ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { AddCareerToProfilDto } from './dto/add-career-profil.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Profils')
 @Controller('profils')
@@ -19,6 +21,7 @@ export class ProfilsController {
   constructor(private readonly profilsService: ProfilsService) {}
 
   @Get()
+  @UseGuards(AuthGuard('discord'))
   @ApiOkResponse({ type: ProfilEntity, isArray: true })
   findAll() {
     return this.profilsService.findAll();
