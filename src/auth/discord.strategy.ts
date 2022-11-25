@@ -30,6 +30,11 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     });
   }
 
+  authenticate(req, options) {
+    options.state = req.query.redirect;
+    super.authenticate(req, options);
+  }
+
   async validate(accessToken: string): Promise<any> {
     const { data } = await lastValueFrom(
       this.http.get('https://discordapp.com/api/users/@me', {

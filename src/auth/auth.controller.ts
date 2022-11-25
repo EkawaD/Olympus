@@ -32,13 +32,15 @@ export class AuthController {
   @Get('discord')
   @UseGuards(DiscordAuthGuard)
   async getUserFromDiscordLogin(@Req() req, @Res() res): Promise<any> {
+    const redirect = req.query.state;
+
     const { accessToken } = await this.authService.login(req.user);
     res
       .cookie('jwt', accessToken, {
         httpOnly: true,
         sameSite: 'lax',
       })
-      .redirect(`http://localhost:3001/profil?accessToken=${accessToken}`);
+      .redirect(`${redirect}?accessToken=${accessToken}&userId=${req.user.id}`);
     // return accessToken;
     // res.
   }
