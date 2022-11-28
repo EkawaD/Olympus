@@ -5,8 +5,9 @@ import { JwtModule } from '@nestjs/jwt';
 import { UsersModule } from 'src/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
-import { DiscordStrategy } from './discord.strategy';
-import { JwtAuthStrategy } from './jwt.strategy';
+
+import { DiscordStrategy } from './guards/discord.strategy';
+import { JwtAuthStrategy } from './guards/jwt.strategy';
 
 @Module({
   imports: [

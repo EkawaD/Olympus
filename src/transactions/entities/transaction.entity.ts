@@ -1,6 +1,5 @@
-import { Transaction } from '@prisma/client';
+import { Transaction, User } from '@prisma/client';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserEntity } from 'src/users/entities/user.entity';
 
 export class TransactionEntity implements Transaction {
   @ApiProperty()
@@ -19,5 +18,5 @@ export class TransactionEntity implements Transaction {
   amount: number;
 
   @ApiProperty()
-  payees: UserEntity[];
+  payees: User[];
 }

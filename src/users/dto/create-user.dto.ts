@@ -1,21 +1,14 @@
-import { ApiProperty } from '@nestjs/swagger';
-
-export class CreateUserDto {
-  @ApiProperty()
+export class DiscordUserDto {
   id: string;
 
-  @ApiProperty()
   username: string;
 
-  @ApiProperty()
   email: string;
 
-  @ApiProperty()
   avatar: string;
+}
 
-  @ApiProperty()
-  accessToken: string;
-
-  @ApiProperty()
-  refreshToken: string;
+export class EmailUserDto {
+  email: string;
+  hash: string;
 }

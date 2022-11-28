@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { UserEntity } from 'src/users/entities/user.entity';
+import { User } from '@prisma/client';
 
 export class CreateTransactionDto {
   @ApiProperty()
@@ -18,5 +18,5 @@ export class CreateTransactionDto {
   amount: number;
 
   @ApiProperty()
-  payees: UserEntity[];
+  payees: User[];
 }

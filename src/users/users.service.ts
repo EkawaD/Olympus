@@ -1,84 +1,79 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import { DiscordUserDto, EmailUserDto } from './dto/create-user.dto';
 
 @Injectable()
 export class UsersService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createUserDto: CreateUserDto) {
-    const img =
-      createUserDto.avatar === null
-        ? 'https://cdn.discordapp.com/embed/avatars/0.png'
-        : 'https://cdn.discordapp.com/avatars/' +
-          createUserDto.id +
-          '/' +
-          createUserDto.avatar;
-    const user = await this.prisma.user.create({
+  createFromDiscord(userDto: DiscordUserDto) {
+    const avatar = userDto.avatar === null ? '/avatar.png' : userDto.avatar;
+
+    return this.prisma.user.create({
       data: {
-        pseudo: createUserDto.username,
-        email: createUserDto.email,
-        discordId: createUserDto.id,
-        image: img,
-        accessToken: createUserDto.accessToken,
-        refreshToken: createUserDto.refreshToken,
+        email: userDto.email,
+        anon: {
+          create: {
+            pseudo: userDto.username,
+            avatar: avatar,
+          },
+        },
+        profil: {
+          create: {},
+        },
       },
     });
-    return user;
   }
 
-  findAll() {
-    return this.prisma.user.findMany({ include: { profil: true } });
-  }
-
-  findOne(id: number) {
-    return this.prisma.user.findUnique({
-      where: { id },
-      include: {
+  create(userDto: EmailUserDto) {
+    return this.prisma.user.create({
+      data: {
+        email: userDto.email,
+        hash: userDto.hash,
+        anon: {
+          create: {},
+        },
         profil: {
-          include: {
-            lettres: true,
-            refs: true,
-            diplomes: true,
-            experiences: true,
-            projects: true,
-            skills: true,
-            hobbies: true,
+          create: {},
+        },
+      },
+    });
+  }
+
+  addAnon(id: number, userDto: DiscordUserDto) {
+    const avatar = userDto.avatar === null ? '/avatar.png' : userDto.avatar;
+    return this.prisma.user.update({
+      where: { id },
+      data: {
+        anon: {
+          create: {
+            avatar: avatar,
+            pseudo: userDto.username,
           },
         },
       },
     });
   }
 
+  findOne(id: number) {
+    return this.prisma.user.findUnique({
+      where: { id },
+    });
+  }
+
   findByMail(email: string) {
     return this.prisma.user.findUnique({
       where: { email },
+      include: { anon: true },
     });
   }
 
-  appendToken(discordUser: CreateUserDto) {
+  addPassword(id: number, hash: string) {
     return this.prisma.user.update({
-      where: { discordId: discordUser.id },
+      where: { id },
       data: {
-        accessToken: discordUser.accessToken,
-        refreshToken: discordUser.refreshToken,
+        hash,
       },
-    });
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return this.prisma.user.update({
-      where: { id },
-      data: updateUserDto,
-      include: { profil: true },
-    });
-  }
-
-  remove(id: number) {
-    return this.prisma.user.delete({
-      where: { id },
-      include: { profil: true },
     });
   }
 }

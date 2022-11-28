@@ -9,7 +9,7 @@ import {
   Hobby,
 } from '@prisma/client';
 
-export class AddCareerToProfilDto {
+export class CVDto {
   @ApiProperty()
   lettres: Lettre[];
   @ApiProperty()

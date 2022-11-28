@@ -1,6 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 
-export class CreateProfilDto {
+export class ProfilDto {
   @ApiProperty()
   name: string;
   @ApiProperty()
@@ -25,3 +25,4 @@ export class CreateProfilDto {
   @ApiProperty()
   github: string | null;
 }
+export class UpdateProfilDto extends PartialType(ProfilDto) {}

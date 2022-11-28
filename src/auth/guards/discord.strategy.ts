@@ -1,11 +1,11 @@
 import { PassportStrategy } from '@nestjs/passport';
-import { ExecutionContext, Injectable } from '@nestjs/common';
-import { AuthService } from './auth.service';
+import { Injectable } from '@nestjs/common';
+import { AuthService } from '../auth.service';
 import { Strategy } from 'passport-oauth2';
 import { stringify } from 'querystring';
 import { HttpService } from '@nestjs/axios';
 import { lastValueFrom } from 'rxjs';
-// change these to be your Discord client ID and secret
+
 const clientID = process.env.DISCORD_CLIENT_ID;
 const clientSecret = process.env.DISCORD_CLIENT_SECRET;
 const callbackURL = process.env.DISCORD_CALLBACK_URL;

@@ -12,19 +12,13 @@ datasource db {
 
 // *** Auth
 model User {
-  id        Int    @id @default(autoincrement())
-  discordId String @unique
+  id Int @id @default(autoincrement())
+
+  email String  @unique
+  hash  String?
 
   profil Profil?
-
-  pseudo       String
-  email        String  @unique
-  hash         String?
-  accessToken  String?
-  refreshToken String?
-  name         String?
-  image        String?
-
+  anon   Anon?
   credit Transaction[]
   debts  Debt[]
 }
@@ -49,7 +43,7 @@ model Debt {
   @@id([userId, transactionId])
 }
 
-// *** Profil
+// *** Hermes
 
 model Profil {
   id Int @id @default(autoincrement())
@@ -57,9 +51,9 @@ model Profil {
   user   User @relation(fields: [userId], references: [id])
   userId Int  @unique
 
-  name      String  @default("Nom")
-  color     String  @default("#008080")
   avatar    String  @default("/avatar.jpg")
+  color     String  @default("#008080")
+  name      String  @default("Nom")
   firstname String  @default("Prénom")
   address   String  @default("Chez moi")
   intro     String  @default("Bienvenue sur mon CV")
@@ -76,6 +70,16 @@ model Profil {
   projects    Project[]
   skills      Skill[]
   hobbies     Hobby[]
+}
+
+model Anon {
+  id Int @id @default(autoincrement())
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+
+  pseudo String @default("pseudo")
+  avatar String @default("/avatar.jpg")
 }
 
 model Lettre {
