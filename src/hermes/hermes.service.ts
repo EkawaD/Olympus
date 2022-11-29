@@ -11,7 +11,6 @@ export class HermesService {
   async allowedOperation(table: string, id: number, userId: number) {
     const profil = await this.findProfil(userId);
     const data = await this.prisma[table].findUnique({ where: { id } });
-    console.log(data, profil);
 
     if (!data || data.profilId !== profil.id) return false;
     return true;

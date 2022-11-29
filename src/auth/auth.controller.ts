@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 
 import { AuthService } from './auth.service';
 
@@ -14,17 +22,17 @@ import { GetUser } from './decorator/get-user.decorator';
 export class AuthController {
   constructor(private authService: AuthService) {}
 
-  @Get('login')
+  @Post('login')
   login(@Body() userDto: LoginDto) {
     return this.authService.login(userDto);
   }
 
-  @Get('signup')
+  @Post('signup')
   signUp(@Body() userDto: SignupDto) {
     return this.authService.signUp(userDto);
   }
 
-  @Get('link')
+  @Post('link')
   @UseGuards(JwtAuthGuard)
   linkAccount(@GetUser('id') id: string, @Body() userDto: SignupDto) {
     return this.authService.addPassword(+id, userDto);
