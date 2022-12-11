@@ -14,6 +14,7 @@ import { CreateTransactionDto } from './dto/create-transaction.dto';
 
 import { MidasService } from './midas.service';
 
+@UseGuards(JwtAuthGuard)
 @Controller('midas')
 export class MidasController {
   constructor(
@@ -21,42 +22,15 @@ export class MidasController {
     private readonly usersService: UsersService
   ) {}
 
-  @UseGuards(JwtAuthGuard)
-  @Get('/group/me')
-  async findUserGroup(@GetUser('id') userId: string) {
-    const user = await this.usersService.findOne(+userId);
-    const groups = await this.midasService.findAllGroup();
-    const g = groups.find((g) => g.anons.find((u) => u.id === user.anon.id));
-
-    g.anons.map((a) => {
-      delete a.id;
-      delete a.userId;
-      delete a.groupId;
-    });
-    return g;
-  }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('/group/:name')
-  async findGroup(@Param('name') name: string, @GetUser('id') userId: string) {
-    if (!this.midasService.isUserInGroup(+userId, name))
-      throw new ForbiddenException();
-    const group = await this.midasService.findGroupByName(name);
-
-    group.anons.map((a) => delete a.id);
-    return group;
-  }
-
-  @UseGuards(JwtAuthGuard)
   @Post('/:name/transactions')
   async addTransaction(
     @Param('name') name: string,
     @GetUser('id') userId: string,
     @GetBody() body: CreateTransactionDto
   ) {
-    if (!this.midasService.isUserInGroup(+userId, name))
+    if (!this.usersService.isUserInGroup(+userId, name))
       throw new ForbiddenException();
-    const group = await this.midasService.findGroupByName(name);
+    const group = await this.usersService.findGroupByName(name);
 
     const transactions = await this.midasService.createTransaction(
       group.id,
@@ -66,22 +40,20 @@ export class MidasController {
     return transactions;
   }
 
-  @UseGuards(JwtAuthGuard)
   @Delete('/:name/transactions/:id')
   async deleteTransaction(
     @Param('name') name: string,
     @Param('id') id: string,
     @GetUser('id') userId: string
   ) {
-    if (!this.midasService.isUserInGroup(+userId, name))
+    if (!this.usersService.isUserInGroup(+userId, name))
       throw new ForbiddenException();
     return await this.midasService.deleteTransaction(+id);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get('/:name/chart')
   async getChart(@Param('name') name: string, @GetUser('id') userId: string) {
-    if (!this.midasService.isUserInGroup(+userId, name))
+    if (!this.usersService.isUserInGroup(+userId, name))
       throw new ForbiddenException();
     return this.midasService.getChart(name);
   }
@@ -89,7 +61,7 @@ export class MidasController {
   @UseGuards(JwtAuthGuard)
   @Get('/:name/advices')
   async getAdvice(@Param('name') name: string, @GetUser('id') userId: string) {
-    if (!this.midasService.isUserInGroup(+userId, name))
+    if (!this.usersService.isUserInGroup(+userId, name))
       throw new ForbiddenException();
     return this.midasService.getAdvices(name);
   }

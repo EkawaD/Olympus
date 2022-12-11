@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { Transaction } from '@prisma/client';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from 'src/users/users.service';
@@ -46,7 +46,7 @@ export class MidasService {
   }
 
   async getChart(groupName: string) {
-    const group = await this.findGroupByName(groupName);
+    const group = await this.usersService.findGroupByName(groupName);
     const transactions = group.transactions;
     const sumOfAmount = (total: any, t: Transaction) => total + t.amount;
     const payer = Object.entries(
@@ -70,39 +70,7 @@ export class MidasService {
         return { creditor: p[0], debitor: u[0], amount: +u[1] * -1 };
       })
     );
-    console.log(refoundAdvice[0]);
 
     return refoundAdvice[0] || [];
-  }
-
-  async isUserInGroup(userId: number, groupName: string) {
-    const group = await this.findGroupByName(groupName);
-    if (!group) throw new NotFoundException();
-    const user = await this.usersService.findOne(+userId);
-
-    if (!group.anons.find((u) => u.id === user.anon.id)) return false;
-    return true;
-  }
-
-  findGroupByName(name: string) {
-    return this.prisma.group.findUnique({
-      where: { name },
-      include: {
-        anons: {
-          select: {
-            id: true,
-            pseudo: true,
-            avatar: true,
-          },
-        },
-        transactions: true,
-      },
-    });
-  }
-
-  findAllGroup() {
-    return this.prisma.group.findMany({
-      include: { anons: true, transactions: true },
-    });
   }
 }

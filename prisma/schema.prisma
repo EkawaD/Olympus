@@ -28,6 +28,28 @@ model Group {
 
   anons        Anon[]
   transactions Transaction[]
+  todos        CategoryTodo[]
+}
+
+// *** Heracles
+model CategoryTodo {
+  id Int @id @default(autoincrement())
+
+  name  String
+  todos Todo[]
+
+  Group   Group? @relation(fields: [groupId], references: [id])
+  groupId Int?
+}
+
+model Todo {
+  id Int @id @default(autoincrement())
+
+  task      String
+  completed Boolean @default(false)
+
+  category       CategoryTodo @relation(fields: [categoryTodoId], references: [id], onDelete: Cascade)
+  categoryTodoId Int
 }
 
 // *** Midas
@@ -79,8 +101,7 @@ model Anon {
   user   User @relation(fields: [userId], references: [id])
   userId Int  @unique
 
-  Group   Group? @relation(fields: [groupId], references: [id])
-  groupId Int?
+  groups Group[]
 
   pseudo String @default("pseudo")
   avatar String @default("/avatar.jpg")
