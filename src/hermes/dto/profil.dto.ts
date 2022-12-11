@@ -13,7 +13,6 @@ export class ProfilDto {
   address: string;
   @ApiProperty()
   intro: string;
-
   @ApiProperty()
   website: string | null;
   @ApiProperty()

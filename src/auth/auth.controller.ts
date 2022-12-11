@@ -46,8 +46,8 @@ export class AuthController {
     const { accessToken } = await this.authService.getToken(user);
     delete user.id;
     delete user.hash;
-    if (!redirect) return res.send({ ...user, accessToken });
 
+    if (!redirect) return res.send({ ...user, accessToken });
     return res.redirect(`${redirect}?accessToken=${accessToken}`);
   }
 }

@@ -1,12 +1,11 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { User } from '@prisma/client';
 
 export class CreateTransactionDto {
   @ApiProperty()
   createdAt: Date;
 
   @ApiProperty()
-  payerId: number;
+  payer: string;
 
   @ApiProperty()
   id: number;
@@ -18,5 +17,8 @@ export class CreateTransactionDto {
   amount: number;
 
   @ApiProperty()
-  payees: User[];
+  payee: string;
+
+  @ApiProperty()
+  groupId: number;
 }

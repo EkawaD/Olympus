@@ -7,7 +7,13 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   createFromDiscord(userDto: DiscordUserDto) {
-    const avatar = userDto.avatar === null ? '/avatar.png' : userDto.avatar;
+    const avatar =
+      userDto.avatar === null
+        ? 'https://cdn.discordapp.com/embed/avatars/0.png'
+        : 'https://cdn.discordapp.com/avatars/' +
+          userDto.id +
+          '/' +
+          userDto.avatar;
 
     return this.prisma.user.create({
       data: {
@@ -58,6 +64,7 @@ export class UsersService {
   findOne(id: number) {
     return this.prisma.user.findUnique({
       where: { id },
+      include: { anon: true },
     });
   }
 

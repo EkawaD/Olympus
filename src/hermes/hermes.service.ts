@@ -44,27 +44,29 @@ export class HermesService {
     });
   }
 
-  findAnonProfil(id: number) {
-    return this.prisma.anon.findUnique({ where: { userId: id } });
+  async findAnonProfil(id: number) {
+    const anon = await this.prisma.anon.findUnique({ where: { userId: id } });
+    delete anon.userId;
+    return anon;
   }
 
   editAnonProfil(id: number, data: UpdateAnonDto) {
     return this.prisma.anon.update({
       where: { userId: id },
-      data,
+      data: data,
     });
   }
 
   addToCV(table: string, data: CVDto) {
     return this.prisma[table].create({
-      data,
+      data: data,
     });
   }
 
   updateCV(table: string, id: number, data: CVDto) {
     return this.prisma[table].update({
       where: { id: id },
-      data,
+      data: data,
     });
   }
 

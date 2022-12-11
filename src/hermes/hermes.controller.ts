@@ -41,19 +41,20 @@ export class HermesController {
 
   @Patch('/cv/me')
   updateProfil(
-    @GetUser('id') userId: string,
-    @GetBody() body: UpdateProfilDto
+    @GetBody() body: UpdateProfilDto,
+    @GetUser('id') userId: string
   ) {
     return this.hermesService.editProfil(+userId, body);
   }
 
   @Post('/cv/:table')
-  addToCV(
+  async addToCV(
     @Param('table') table: string,
     @GetUser('id') userId: string,
     @GetBody() body: CVDto
   ) {
-    const data = { ...body, userId };
+    const { id } = await this.hermesService.findProfil(+userId);
+    const data = { ...body, profilId: id };
     return this.hermesService.addToCV(table, data);
   }
 
