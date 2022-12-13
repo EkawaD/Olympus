@@ -6,4 +6,7 @@ export class TodoDto {
 
   @ApiProperty()
   categoryId: number;
+
+  @ApiProperty()
+  completed: boolean;
 }

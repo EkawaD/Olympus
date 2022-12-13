@@ -30,6 +30,13 @@ export class HeraclesService {
     });
   }
 
+  updateTodo(id: number, dto: TodoDto) {
+    return this.prisma.todo.update({
+      where: { id },
+      data: dto,
+    });
+  }
+
   removeCategory(id: number) {
     return this.prisma.categoryTodo.delete({ where: { id } });
   }

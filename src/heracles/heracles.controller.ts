@@ -5,6 +5,7 @@ import {
   Delete,
   ForbiddenException,
   UseGuards,
+  Patch,
 } from '@nestjs/common';
 import { HeraclesService } from './heracles.service';
 import { CategoryDto } from './dto/category.dto';
@@ -45,6 +46,19 @@ export class HeraclesController {
       throw new ForbiddenException();
 
     return this.heraclesService.createTodo(dto);
+  }
+
+  @Patch('/:name/todo/:id')
+  async updateTodo(
+    @Param('name') name: string,
+    @Param('id') id: string,
+    @GetUser('id') userId: string,
+    @GetBody() dto: TodoDto
+  ) {
+    if (!this.usersService.isUserInGroup(+userId, name))
+      throw new ForbiddenException();
+
+    return this.heraclesService.updateTodo(+id, dto);
   }
 
   @Delete('/:name/category/:id')
