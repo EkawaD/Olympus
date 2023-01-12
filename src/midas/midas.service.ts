@@ -73,4 +73,9 @@ export class MidasService {
 
     return refoundAdvice[0] || [];
   }
+
+  async insultSeb() {
+    const insulte = 'connard';
+    return insulte;
+  }
 }

@@ -61,6 +61,18 @@ export class HeraclesController {
     return this.heraclesService.updateTodo(+id, dto);
   }
 
+  @Delete('/:name/todo/:id')
+  async deleteTodo(
+    @Param('name') name: string,
+    @Param('id') id: string,
+    @GetUser('id') userId: string
+  ) {
+    if (!this.usersService.isUserInGroup(+userId, name))
+      throw new ForbiddenException();
+
+    return this.heraclesService.deleteTodo(+id);
+  }
+
   @Delete('/:name/category/:id')
   async remove(
     @Param('id') id: string,

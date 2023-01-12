@@ -37,6 +37,12 @@ export class HeraclesService {
     });
   }
 
+  deleteTodo(id: number) {
+    return this.prisma.todo.delete({
+      where: { id },
+    });
+  }
+
   removeCategory(id: number) {
     return this.prisma.categoryTodo.delete({ where: { id } });
   }
