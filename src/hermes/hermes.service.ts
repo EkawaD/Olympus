@@ -16,6 +16,14 @@ export class HermesService {
     return true;
   }
 
+  async findEkawaCv() {
+    const user = await this.prisma.user.findUnique({
+      where: { email: 'steo.ederhy@gmail.com' },
+      include: { profil: true },
+    });
+    return this.findPublicProfil(user.id);
+  }
+
   findProfil(id: number) {
     return this.prisma.profil.findUnique({
       where: { userId: id },

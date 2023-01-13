@@ -18,17 +18,22 @@ import { UpdateProfilDto } from './dto/profil.dto';
 import { CVDto } from './dto/cv.dto';
 import { ApiTags } from '@nestjs/swagger';
 
-@UseGuards(JwtAuthGuard)
 @Controller('hermes')
 @ApiTags('Hermes')
 export class HermesController {
   constructor(private readonly hermesService: HermesService) {}
 
+  @Get('/cv/ekawa')
+  findEkawaCV() {
+    return this.hermesService.findEkawaCv();
+  }
+  @UseGuards(JwtAuthGuard)
   @Get('/cv/me')
   findPublicProfil(@GetUser('id') id: string) {
     return this.hermesService.findPublicProfil(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('/cv/me')
   updateProfil(
     @GetBody() body: UpdateProfilDto,
@@ -37,6 +42,7 @@ export class HermesController {
     return this.hermesService.editProfil(+userId, body);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/cv/:table')
   async addToCV(
     @Param('table') table: string,
@@ -48,6 +54,7 @@ export class HermesController {
     return this.hermesService.addToCV(table, data);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('/cv/:table/:id')
   async updateCV(
     @Param('id') id: string,
@@ -65,6 +72,7 @@ export class HermesController {
     return this.hermesService.updateCV(table, +id, body);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Delete('/cv/:table/:id')
   async deleteFromCV(
     @Param('id') id: string,
