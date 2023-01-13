@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
 
 export class CreateTransactionDto {
   @ApiProperty()
@@ -22,3 +22,5 @@ export class CreateTransactionDto {
   @ApiProperty()
   groupId: number;
 }
+
+export class UpdateTransactionDto extends PartialType(CreateTransactionDto) {}

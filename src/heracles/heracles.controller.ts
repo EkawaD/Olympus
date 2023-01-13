@@ -9,18 +9,18 @@ import {
 } from '@nestjs/common';
 import { HeraclesService } from './heracles.service';
 import { CategoryDto } from './dto/category.dto';
-import { UsersService } from 'src/users/users.service';
-import { GetUser } from 'src/auth/decorator/get-user.decorator';
+import { GetUser } from 'src/users/decorator/get-user.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
-import { GetBody } from 'src/auth/decorator/get-body.decorator';
+import { GetBody } from 'src/users/decorator/get-body.decorator';
 import { TodoDto } from './dto/todo.dto';
+import { GroupService } from 'src/group/group.service';
 
 @UseGuards(JwtAuthGuard)
 @Controller('heracles')
 export class HeraclesController {
   constructor(
     private readonly heraclesService: HeraclesService,
-    private readonly usersService: UsersService
+    private readonly groupService: GroupService
   ) {}
 
   @Post('/:name/category')
@@ -29,9 +29,9 @@ export class HeraclesController {
     @GetUser('id') userId: string,
     @GetBody() dto: CategoryDto
   ) {
-    if (!this.usersService.isUserInGroup(+userId, name))
+    if (!this.groupService.isUserInGroup(+userId, name))
       throw new ForbiddenException();
-    const group = await this.usersService.findGroupByName(name);
+    const group = await this.groupService.findByName(name);
 
     return this.heraclesService.createCategory(dto, group.id);
   }
@@ -42,7 +42,7 @@ export class HeraclesController {
     @GetUser('id') userId: string,
     @GetBody() dto: TodoDto
   ) {
-    if (!this.usersService.isUserInGroup(+userId, name))
+    if (!this.groupService.isUserInGroup(+userId, name))
       throw new ForbiddenException();
 
     return this.heraclesService.createTodo(dto);
@@ -55,7 +55,7 @@ export class HeraclesController {
     @GetUser('id') userId: string,
     @GetBody() dto: TodoDto
   ) {
-    if (!this.usersService.isUserInGroup(+userId, name))
+    if (!this.groupService.isUserInGroup(+userId, name))
       throw new ForbiddenException();
 
     return this.heraclesService.updateTodo(+id, dto);
@@ -67,7 +67,7 @@ export class HeraclesController {
     @Param('id') id: string,
     @GetUser('id') userId: string
   ) {
-    if (!this.usersService.isUserInGroup(+userId, name))
+    if (!this.groupService.isUserInGroup(+userId, name))
       throw new ForbiddenException();
 
     return this.heraclesService.deleteTodo(+id);
@@ -79,7 +79,7 @@ export class HeraclesController {
     @Param('name') name: string,
     @GetUser('id') userId: string
   ) {
-    if (!this.usersService.isUserInGroup(+userId, name))
+    if (!this.groupService.isUserInGroup(+userId, name))
       throw new ForbiddenException();
 
     return this.heraclesService.removeCategory(+id);

@@ -1,6 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { DiscordUserDto, EmailUserDto } from './dto/create-user.dto';
+import { DiscordUserDto, EmailUserDto } from './dto/user.dto';
+import { UpdateAnonDto } from '../users/dto/anon.dto';
 
 @Injectable()
 export class UsersService {
@@ -61,6 +62,19 @@ export class UsersService {
     });
   }
 
+  async findAnonProfil(id: number) {
+    const anon = await this.prisma.anon.findUnique({ where: { userId: id } });
+    delete anon.userId;
+    return anon;
+  }
+
+  editAnonProfil(id: number, data: UpdateAnonDto) {
+    return this.prisma.anon.update({
+      where: { userId: id },
+      data: data,
+    });
+  }
+
   findOne(id: number) {
     return this.prisma.user.findUnique({
       where: { id },
@@ -80,43 +94,6 @@ export class UsersService {
       where: { id },
       data: {
         hash,
-      },
-    });
-  }
-
-  async isUserInGroup(userId: number, groupName: string) {
-    const group = await this.findGroupByName(groupName);
-
-    if (!group) throw new NotFoundException();
-    const user = await this.findOne(+userId);
-
-    if (!group.anons.find((u) => u.id === user.anon.id)) return false;
-    return true;
-  }
-
-  findGroupByName(name: string) {
-    return this.prisma.group.findUnique({
-      where: { name },
-      include: {
-        anons: {
-          select: {
-            id: true,
-            pseudo: true,
-            avatar: true,
-          },
-        },
-        transactions: true,
-        todos: { include: { todos: true } },
-      },
-    });
-  }
-
-  findAllGroup() {
-    return this.prisma.group.findMany({
-      include: {
-        anons: true,
-        transactions: true,
-        todos: { include: { todos: true } },
       },
     });
   }

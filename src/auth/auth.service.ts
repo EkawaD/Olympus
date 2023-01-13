@@ -3,7 +3,7 @@ import { UsersService } from 'src/users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import * as argon from 'argon2';
 import { SignupDto } from './dto/signup.dto';
-import { DiscordUserDto } from 'src/users/dto/create-user.dto';
+import { DiscordUserDto } from 'src/users/dto/user.dto';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime';
 import { LoginDto } from './dto/login.dto';
 

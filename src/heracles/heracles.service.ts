@@ -1,15 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UsersService } from 'src/users/users.service';
 import { CategoryDto } from './dto/category.dto';
 import { TodoDto } from './dto/todo.dto';
 
 @Injectable()
 export class HeraclesService {
-  constructor(
-    private prisma: PrismaService,
-    private usersService: UsersService
-  ) {}
+  constructor(private prisma: PrismaService) {}
 
   createCategory(dto: CategoryDto, groupId: number) {
     return this.prisma.categoryTodo.create({

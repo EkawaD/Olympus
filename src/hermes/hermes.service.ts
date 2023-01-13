@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UpdateAnonDto } from './dto/anon.dto';
+
 import { CVDto } from './dto/cv.dto';
 import { UpdateProfilDto } from './dto/profil.dto';
 
@@ -41,19 +41,6 @@ export class HermesService {
         skills: true,
         hobbies: true,
       },
-    });
-  }
-
-  async findAnonProfil(id: number) {
-    const anon = await this.prisma.anon.findUnique({ where: { userId: id } });
-    delete anon.userId;
-    return anon;
-  }
-
-  editAnonProfil(id: number, data: UpdateAnonDto) {
-    return this.prisma.anon.update({
-      where: { userId: id },
-      data: data,
     });
   }
 

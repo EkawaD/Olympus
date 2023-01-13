@@ -29,6 +29,27 @@ model Group {
   anons        Anon[]
   transactions Transaction[]
   todos        CategoryTodo[]
+  invitations  Invitation[]
+}
+
+//*** NOtif 
+
+enum Status {
+  EnAttente
+  Accept
+  Decline
+}
+
+model Invitation {
+  id Int @id @default(autoincrement())
+
+  group   Group @relation(fields: [groupId], references: [id])
+  groupId Int
+
+  destinataire Anon @relation(fields: [anonId], references: [id])
+  anonId       Int
+
+  status Status
 }
 
 // *** Heracles
@@ -103,8 +124,9 @@ model Anon {
 
   groups Group[]
 
-  pseudo String @default("pseudo")
-  avatar String @default("/avatar.jpg")
+  pseudo     String       @default("pseudo")
+  avatar     String       @default("/avatar.jpg")
+  Invitation Invitation[]
 }
 
 model Lettre {

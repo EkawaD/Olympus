@@ -11,9 +11,9 @@ import {
 import { HermesService } from './hermes.service';
 
 import { JwtAuthGuard } from 'src/auth/guards/auth.guard';
-import { GetUser } from 'src/auth/decorator/get-user.decorator';
+import { GetUser } from 'src/users/decorator/get-user.decorator';
 
-import { GetBody } from 'src/auth/decorator/get-body.decorator';
+import { GetBody } from 'src/users/decorator/get-body.decorator';
 import { UpdateProfilDto } from './dto/profil.dto';
 import { CVDto } from './dto/cv.dto';
 import { ApiTags } from '@nestjs/swagger';
@@ -23,16 +23,6 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('Hermes')
 export class HermesController {
   constructor(private readonly hermesService: HermesService) {}
-
-  @Get('/anon/me')
-  findAnonProfil(@GetUser('id') id: string) {
-    return this.hermesService.findAnonProfil(+id);
-  }
-
-  @Patch('/anon/me')
-  updateAnon(@GetUser('id') userId: string, @GetBody() body: UpdateProfilDto) {
-    return this.hermesService.editProfil(+userId, body);
-  }
 
   @Get('/cv/me')
   findPublicProfil(@GetUser('id') id: string) {

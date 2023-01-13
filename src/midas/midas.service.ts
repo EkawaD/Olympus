@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { Transaction } from '@prisma/client';
+import { GroupService } from 'src/group/group.service';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { UsersService } from 'src/users/users.service';
-import { CreateTransactionDto } from '../midas/dto/create-transaction.dto';
+import { CreateTransactionDto } from './dto/transaction.dto';
 
 @Injectable()
 export class MidasService {
   constructor(
     private prisma: PrismaService,
-    private usersService: UsersService
+    private groupService: GroupService
   ) {}
 
   groupBy(
@@ -46,7 +46,7 @@ export class MidasService {
   }
 
   async getChart(groupName: string) {
-    const group = await this.usersService.findGroupByName(groupName);
+    const group = await this.groupService.findByName(groupName);
     const transactions = group.transactions;
     const sumOfAmount = (total: any, t: Transaction) => total + t.amount;
     const payer = Object.entries(
@@ -72,10 +72,5 @@ export class MidasService {
     );
 
     return refoundAdvice[0] || [];
-  }
-
-  async insultSeb() {
-    const insulte = 'connard';
-    return insulte;
   }
 }

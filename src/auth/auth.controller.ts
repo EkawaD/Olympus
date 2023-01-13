@@ -15,7 +15,7 @@ import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { SignupDto } from './dto/signup.dto';
 import { LoginDto } from './dto/login.dto';
-import { GetUser } from './decorator/get-user.decorator';
+import { GetUser } from '../users/decorator/get-user.decorator';
 
 @ApiTags('Auth')
 @Controller('auth')
