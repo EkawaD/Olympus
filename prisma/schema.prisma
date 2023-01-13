@@ -32,12 +32,25 @@ model Group {
   invitations  Invitation[]
 }
 
+model Anon {
+  id Int @id @default(autoincrement())
+
+  user   User @relation(fields: [userId], references: [id])
+  userId Int  @unique
+
+  groups Group[]
+
+  pseudo     String       @default("pseudo")
+  avatar     String       @default("/avatar.jpg")
+  Invitation Invitation[]
+}
+
 //*** NOtif 
 
 enum Status {
-  EnAttente
-  Accept
-  Decline
+  Pending
+  Accepted
+  Declined
 }
 
 model Invitation {
@@ -114,19 +127,6 @@ model Profil {
   projects    Project[]
   skills      Skill[]
   hobbies     Hobby[]
-}
-
-model Anon {
-  id Int @id @default(autoincrement())
-
-  user   User @relation(fields: [userId], references: [id])
-  userId Int  @unique
-
-  groups Group[]
-
-  pseudo     String       @default("pseudo")
-  avatar     String       @default("/avatar.jpg")
-  Invitation Invitation[]
 }
 
 model Lettre {
