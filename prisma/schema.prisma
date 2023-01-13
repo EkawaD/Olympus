@@ -29,7 +29,7 @@ model Group {
   anons        Anon[]
   transactions Transaction[]
   todos        CategoryTodo[]
-  invitations  Invitation[]
+  // invitations  Invitation[]
 }
 
 model Anon {
@@ -40,30 +40,30 @@ model Anon {
 
   groups Group[]
 
-  pseudo     String       @default("pseudo")
-  avatar     String       @default("/avatar.jpg")
-  Invitation Invitation[]
+  pseudo String @default("pseudo")
+  avatar String @default("/avatar.jpg")
+  // invitations Invitation[]
 }
 
-//*** NOtif 
+//*** Notif 
 
-enum Status {
-  Pending
-  Accepted
-  Declined
-}
+// enum Status {
+//   Pending
+//   Accepted
+//   Declined
+// }
 
-model Invitation {
-  id Int @id @default(autoincrement())
+// model Invitation {
+//   id Int @id @default(autoincrement())
 
-  group   Group @relation(fields: [groupId], references: [id])
-  groupId Int
+//   group   Group @relation(fields: [groupId], references: [id])
+//   groupId Int
 
-  destinataire Anon @relation(fields: [anonId], references: [id])
-  anonId       Int
+//   destinataire Anon @relation(fields: [anonId], references: [id])
+//   anonId       Int
 
-  status Status
-}
+//   status Status
+// }
 
 // *** Heracles
 model CategoryTodo {
