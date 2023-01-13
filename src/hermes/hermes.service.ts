@@ -21,7 +21,10 @@ export class HermesService {
       where: { email: 'steo.ederhy@gmail.com' },
       include: { profil: true },
     });
-    return this.findPublicProfil(user.id);
+    const profil = await this.findPublicProfil(user.id);
+    delete profil.userId;
+    delete profil.id;
+    return profil;
   }
 
   findProfil(id: number) {
