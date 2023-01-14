@@ -8,6 +8,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 // *** Auth
@@ -29,6 +30,8 @@ model Group {
   anons        Anon[]
   transactions Transaction[]
   todos        CategoryTodo[]
+  recipes      Recipe[]
+  products     Product[]
   // invitations  Invitation[]
 }
 
@@ -64,6 +67,63 @@ model Anon {
 
 //   status Status
 // }
+
+// *** Ceres
+
+enum Meal {
+  MondayNoon
+  MondayEvening
+  TuesdayNoon
+  TuesdayEvening
+  WednesdayNoon
+  WednesdayEvening
+  ThursdayNoon
+  ThursdayEvening
+  FridayNoon
+  FridayEvening
+  SaturdayNoon
+  SaturdayEvening
+  SundayNoon
+  SundayEvening
+}
+
+model Recipe {
+  id      Int    @id @default(autoincrement())
+  group   Group? @relation(fields: [groupId], references: [id])
+  groupId Int?
+
+  name  String @unique
+  tasks String
+
+  time        String
+  hint        String
+  servings    Int          @default(4)
+  image       String       @default("/default_recipe.jpg")
+  meal        Meal         @unique
+  ingredients Ingredient[]
+}
+
+model Product {
+  id      Int    @id @default(autoincrement())
+  group   Group? @relation(fields: [groupId], references: [id])
+  groupId Int?
+
+  name        String       @unique
+  stock       Int          @default(0)
+  toBuy       Int          @default(0)
+  ingredients Ingredient[]
+}
+
+model Ingredient {
+  id Int @id @default(autoincrement())
+
+  needed Int
+
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  recipe    Recipe  @relation(fields: [recipeId], references: [id])
+  recipeId  Int
+}
 
 // *** Heracles
 model CategoryTodo {

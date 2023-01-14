@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { UsersService } from 'src/users/users.service';
 import { CreateGroupDto, UpdateGroupDto } from './dto/group.dto';
@@ -10,14 +10,27 @@ export class GroupService {
     private prisma: PrismaService
   ) {}
 
-  async isUserInGroup(userId: number, groupName: string) {
-    const group = await this.findByName(groupName);
+  // async isUserInGroup(userId: number, groupName: string) {
+  //   const group = await this.findByName(groupName);
 
-    if (!group) throw new NotFoundException();
-    const user = await this.usersService.findOne(+userId);
+  //   if (!group) throw new NotFoundException();
+  //   const user = await this.usersService.findOne(+userId);
 
-    if (!group.anons.find((u) => u.id === user.anon.id)) return false;
-    return true;
+  //   if (!group.anons.find((u) => u.id === user.anon.id)) return false;
+  //   return true;
+  // }
+
+  async addUserInGroup(userId: number, name: string) {
+    const user = await this.usersService.findOne(userId);
+    const group = await this.findByName(name);
+    return this.prisma.group.update({
+      where: { name },
+      data: {
+        anons: {
+          set: [...group.anons, user.anon],
+        },
+      },
+    });
   }
 
   async findUserGroups(userId: number) {
@@ -98,9 +111,9 @@ export class GroupService {
     });
   }
 
-  update(id: number, dto: UpdateGroupDto) {
+  update(name: string, dto: UpdateGroupDto) {
     return this.prisma.group.update({
-      where: { id: id },
+      where: { name: name },
       data: {
         name: dto.name,
       },

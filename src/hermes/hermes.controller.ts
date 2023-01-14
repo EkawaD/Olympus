@@ -27,6 +27,7 @@ export class HermesController {
   findEkawaCV() {
     return this.hermesService.findEkawaCv();
   }
+
   @UseGuards(JwtAuthGuard)
   @Get('/cv/me')
   findPublicProfil(@GetUser('id') id: string) {
