@@ -16,6 +16,7 @@ export class GroupGuard implements CanActivate {
     const req = context.switchToHttp().getRequest();
     const groupName = req.params.name;
     const user = req.user;
+
     if (user.anon.groups.map((g) => g.name).includes(groupName)) {
       return true;
     }

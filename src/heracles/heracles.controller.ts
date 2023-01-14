@@ -16,7 +16,6 @@ import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Heracles')
 @UseGuards(JwtAuthGuard)
-@UseGuards(GroupGuard)
 @Controller('heracles')
 export class HeraclesController {
   constructor(
@@ -24,6 +23,7 @@ export class HeraclesController {
     private readonly groupService: GroupService
   ) {}
 
+  @UseGuards(GroupGuard)
   @Post('/:name/category')
   async createCategory(
     @Param('name') name: string,
@@ -33,21 +33,25 @@ export class HeraclesController {
     return this.heraclesService.createCategory(dto, group.id);
   }
 
+  @UseGuards(GroupGuard)
   @Post('/:name/todo')
   async createTodo(@GetBody() dto: TodoDto) {
     return this.heraclesService.createTodo(dto);
   }
 
+  @UseGuards(GroupGuard)
   @Patch('/:name/todo/:id')
   async updateTodo(@Param('id') id: string, @GetBody() dto: TodoDto) {
     return this.heraclesService.updateTodo(+id, dto);
   }
 
+  @UseGuards(GroupGuard)
   @Delete('/:name/todo/:id')
   async deleteTodo(@Param('id') id: string) {
     return this.heraclesService.deleteTodo(+id);
   }
 
+  @UseGuards(GroupGuard)
   @Delete('/:name/category/:id')
   async remove(@Param('id') id: string) {
     return this.heraclesService.removeCategory(+id);

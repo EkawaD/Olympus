@@ -15,7 +15,7 @@ export class UsersService {
       where: { name },
       include: { anons: true },
     });
-    return this.prisma.group.update({
+    await this.prisma.group.update({
       where: { name },
       data: {
         anons: {
@@ -23,6 +23,7 @@ export class UsersService {
         },
       },
     });
+    return user;
   }
 
   async createFromDiscord(userDto: DiscordUserDto) {
@@ -48,8 +49,7 @@ export class UsersService {
         },
       },
     });
-    await this.addUserInGroup(user.id, 'Galériens');
-    return user;
+    return this.addUserInGroup(user.id, 'Galériens');
   }
 
   create(userDto: EmailUserDto) {
