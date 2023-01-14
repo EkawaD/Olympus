@@ -2,14 +2,28 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { DiscordUserDto, EmailUserDto } from './dto/user.dto';
 import { UpdateAnonDto } from '../users/dto/anon.dto';
-import { GroupService } from 'src/group/group.service';
 
 @Injectable()
 export class UsersService {
   constructor(
-    private prisma: PrismaService,
-    private groupService: GroupService
+    private prisma: PrismaService // private groupService: GroupService
   ) {}
+
+  async addUserInGroup(userId: number, name: string) {
+    const user = await this.findOne(userId);
+    const group = await this.prisma.group.findUnique({
+      where: { name },
+      include: { anons: true },
+    });
+    return this.prisma.group.update({
+      where: { name },
+      data: {
+        anons: {
+          set: [...group.anons, user.anon],
+        },
+      },
+    });
+  }
 
   async createFromDiscord(userDto: DiscordUserDto) {
     const avatar =
@@ -34,7 +48,7 @@ export class UsersService {
         },
       },
     });
-    await this.groupService.addUserInGroup(user.id, 'Galériens');
+    await this.addUserInGroup(user.id, 'Galériens');
     return user;
   }
 
