@@ -15,11 +15,13 @@ export class UsersService {
       where: { name },
       include: { anons: true },
     });
+    group.anons.push(user.anon);
+    const anonsList = group.anons.map((a) => ({ id: a.id }));
     await this.prisma.group.update({
       where: { name },
       data: {
         anons: {
-          set: [...group.anons, user.anon],
+          set: anonsList,
         },
       },
     });
