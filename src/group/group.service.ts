@@ -63,6 +63,8 @@ export class GroupService {
         },
         transactions: true,
         todos: { include: { todos: true } },
+        recipes: { include: { ingredients: true } },
+        products: true,
       },
     });
   }

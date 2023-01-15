@@ -15,8 +15,8 @@ import { GroupService } from 'src/group/group.service';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Heracles')
-@UseGuards(JwtAuthGuard)
 @Controller('heracles')
+@UseGuards(JwtAuthGuard)
 export class HeraclesController {
   constructor(
     private readonly heraclesService: HeraclesService,

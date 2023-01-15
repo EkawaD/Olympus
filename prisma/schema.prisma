@@ -6,9 +6,9 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
-  // shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
+  shadowDatabaseUrl = env("SHADOW_DATABASE_URL")
 }
 
 // *** Auth
@@ -99,7 +99,7 @@ model Recipe {
   hint        String
   servings    Int          @default(4)
   image       String       @default("/default_recipe.jpg")
-  meal        Meal         @unique
+  meal        Meal?        @unique
   ingredients Ingredient[]
 }
 
@@ -121,7 +121,7 @@ model Ingredient {
 
   product   Product @relation(fields: [productId], references: [id])
   productId Int
-  recipe    Recipe  @relation(fields: [recipeId], references: [id])
+  recipe    Recipe  @relation(fields: [recipeId], references: [id], onDelete: Cascade)
   recipeId  Int
 }
 

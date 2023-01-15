@@ -6,6 +6,7 @@ import { HermesModule } from './hermes/hermes.module';
 import { MidasModule } from './midas/midas.module';
 import { HeraclesModule } from './heracles/heracles.module';
 import { GroupModule } from './group/group.module';
+import { CeresModule } from './ceres/ceres.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { GroupModule } from './group/group.module';
     MidasModule,
     HeraclesModule,
     GroupModule,
+    CeresModule,
   ],
 })
 export class AppModule {}
